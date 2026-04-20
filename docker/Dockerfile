@@ -1,21 +1,27 @@
 FROM composer:2.9@sha256:743aebe48ca67097c36819040633ea77e44a561eca135e4fc84c002e63a1ba07 AS composer
 FROM debian:trixie@sha256:55a15a112b42be10bfc8092fcc40b6748dc236f7ef46a358d9392b339e9d60e8
+
+ARG PHP_VERSION=8.5
+
 WORKDIR /usr/src/myapp
 
-RUN apt-get update  \
+RUN apt-get update \
     && apt-get install -y --no-install-recommends git wget gnupg2 \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --gid 1000 php \
     && useradd --system --uid 1000 --gid php --shell /bin/bash --create-home php
 
-RUN apt-get update && apt-get install -y lsb-release apt-transport-https ca-certificates \
-  && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list \
-  && wget -qO - https://packages.sury.org/php/apt.gpg | apt-key add - \
-  && apt-get update
-
-ARG PHP_VERSION=8.3
+# https://packages.sury.org/php/README.txt
+RUN apt-get update \
+    && apt-get -y install lsb-release ca-certificates curl \
+    && curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
+    && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
+    && rm /tmp/debsuryorg-archive-keyring.deb \
+    && sh -c 'echo "deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list' \
+    && apt-get update
 
 RUN apt-get install -y \
+    php${PHP_VERSION}-amqp \
     php${PHP_VERSION}-ast \
     php${PHP_VERSION}-cli \
     php${PHP_VERSION}-curl \
@@ -23,19 +29,18 @@ RUN apt-get install -y \
     php${PHP_VERSION}-grpc \
     php${PHP_VERSION}-intl \
     php${PHP_VERSION}-mbstring \
-    php${PHP_VERSION}-opcache \
+    php${PHP_VERSION}-mongodb \
+    php${PHP_VERSION}-mysqli \
+    `if echo "${PHP_VERSION}" | grep -qE '^8\.(1|2|3|4)'; then echo "php${PHP_VERSION}-opcache"; fi` \
     php${PHP_VERSION}-opentelemetry \
+    php${PHP_VERSION}-pgsql \
     php${PHP_VERSION}-protobuf \
+    php${PHP_VERSION}-rdkafka \
     php${PHP_VERSION}-simplexml \
     php${PHP_VERSION}-sockets \
+    php${PHP_VERSION}-sqlite3 \
     php${PHP_VERSION}-xdebug \
     php${PHP_VERSION}-zip \
-    php${PHP_VERSION}-mongodb \
-    php${PHP_VERSION}-amqp \
-    php${PHP_VERSION}-rdkafka \
-    php${PHP_VERSION}-mysqli \
-    php${PHP_VERSION}-pgsql \
-    php${PHP_VERSION}-sqlite3 \
     unzip
 
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
