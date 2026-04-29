@@ -8,6 +8,7 @@ use OpenTelemetry\API\Behavior\Internal\LogWriter\ErrorLogWriter;
 use OpenTelemetry\API\Behavior\Internal\LogWriter\NoopLogWriter;
 use OpenTelemetry\API\Behavior\Internal\LogWriter\Psr3LogWriter;
 use OpenTelemetry\API\Behavior\Internal\LogWriter\StreamLogWriter;
+use OpenTelemetry\API\Behavior\Internal\LogWriter\TriggerErrorLogWriter;
 use OpenTelemetry\API\Behavior\Internal\LogWriterFactory;
 use OpenTelemetry\API\LoggerHolder;
 use OpenTelemetry\Tests\TestState;
@@ -41,6 +42,7 @@ class LogWriterFactoryTest extends TestCase
     {
         return [
             ['error_log', ErrorLogWriter::class],
+            ['trigger_error', TriggerErrorLogWriter::class],
             ['stdout', StreamLogWriter::class],
             ['stderr', StreamLogWriter::class],
             ['none', NoopLogWriter::class],
