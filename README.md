@@ -56,3 +56,18 @@ OpenTelemetry for PHP aims to support all officially supported PHP versions acco
 support will be dropped for PHP versions within 12 months of that version going _End of life_.
 
 Versioning rationale can be found in the [Versioning Documentation](/docs/versioning.md)
+
+### Emeritus
+
+- [Ago Allikmaa](https://github.com/agoallikmaa), Approver
+- [Amber Sistla](https://github.com/zsistla), Triager
+- [Beniamin](https://github.com/beniamin), Triager
+- [Fahmy Mohammed](https://github.com/Fahmy-Mohammed), Triager
+- [Jodee Varney](https://github.com/jodeev), Triager
+- [Kishan Sangani](https://github.com/kishannsangani), Triager
+- [Levi Morrison](https://github.com/morrisonlevi), Triager
+- [Przemyslaw Delewski](https://github.com/pdelewski), Triager
+- [Timo Michna](https://github.com/tidal), Triager
+
+For more information about the emeritus role, see the
+[community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#emeritus-maintainerapprovertriager).
